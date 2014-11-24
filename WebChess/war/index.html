@@ -1,0 +1,79 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> <!-- HTML 4.x --> <meta charset="utf-8"> <!-- HTML5 -->
+<style>
+/* =============================================================================
+  ASIDES
+============================================================================= */
+.aside {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.aside {}
+
+.aside:last-child {
+  margin-bottom: 0;
+}
+
+.aside__title {
+  margin-bottom: 10px;
+}
+
+.aside__ad {
+  text-align: center;
+}
+input[type="text"], input[type="url"] {
+display: block;
+padding: 8px 5px;
+width: 100%;
+color: #787a80;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+border: solid 1px #c8cbcf;
+}
+</style>
+</head>
+<body><br><br><br>
+<center>
+<h1 style="color:#777777; font-family:verdana;">&nbsp;ONLINE CHESS</h1>
+<div id="error" style="margin-left:90px; font-family:verdana; color:#ff0000; font-size:10px;"></div>
+<div class="aside">
+   
+      <h4 class="aside__title" style="font-family:verdana; color:#777777; font-size:12px;">Bitte den Namen der Gamesession eingeben, der Sie beitreten möchten <br><span style="font-size:11px;">&nbsp;(bzw. unter dem Sie eine neue Session starten möchten)</span></h4>
+
+        <form action="WebChess.html" method="get" id="mc-embedded-subscribe-form">
+          <div>
+            
+            <input type="text" name="playID" value="" style="width:500px;">
+          </div>
+         
+            <br>
+            <input type="submit" value="Beitreten" id="mc-embedded-subscribe" class="button button__small button__pink">
+       
+        </form>
+
+  </div>
+  <div style="padding-left:6px; width:500px; font-family:verdana; color:#777777; font-size:11px;">
+  	<div style="padding-left:10px; padding-right:7px; padding-top:20px; padding-bottom:20px; border-style:solid; border-width:1px; border-color:#0000ff;">Zum Spielen müssen 2 Spieler einen beliebig wählbaren Namen für eine Spielesession eingeben (beide Spiele müssen denselben Namen wählen um innerhalb derselben Session gegeneinander spielen zu können).<br><br>Als kleines Bonusfeature können beliebig viele weitere Gäste den Spielverlauf live beobachten, indem sie der Spielsession durch Eingabe des entsprechenden Namens ebenfalls beitreten (aktiv spielend sind allerdings immer nur die ersten Beiden, die eine Spielsession betreten).<br><br>Es können natürlich beliebig viele Spielsessions parallel gestartet werden, ohne, dass diese sich in irgendeiner Art beeinflussen würden. Eine neue Spielsession wird immer automatisch gestartet, sobald man einen Namen für eine Spielsession wählt, unter der aktuell kein anderes Spiel stattfindet.</div>
+  </div>
+  </center>
+  </body>
+  <script>
+  var param1var = getQueryVariable("err");
+  if(param1var==1) document.getElementById("error").innerHTML="Einer der Spieler hat das Spiel beendet.";
+
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  } 
+  //alert('Query Variable ' + variable + ' not found');
+}
+  </script>
+  </html>

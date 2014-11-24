@@ -1,0 +1,158 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the     -->
+<!-- browser's rendering engine into                -->
+<!-- "Standards Mode". Replacing this declaration   -->
+<!-- with a "Quirks Mode" doctype is not supported. -->
+
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"> <!-- HTML 4.x --> <meta charset="utf-8"> <!-- HTML5 -->
+
+
+    <!--                                                               -->
+    <!-- Consider inlining CSS to reduce the number of requested files -->
+    <!--                                                               -->
+    <link type="text/css" rel="stylesheet" href="WebChess.css">
+
+    <!--                                           -->
+    <!-- Any title is fine                         -->
+    <!--                                           -->
+    <title>Web Application Starter Project</title>
+    
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="webchess/webchess.nocache.js"></script>
+  </head>
+
+  <!--                                           -->
+  <!-- The body can have arbitrary html, or      -->
+  <!-- you can leave the body empty if you want  -->
+  <!-- to create a completely dynamic UI.        -->
+  <!--                                           -->
+  
+  <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<script>
+
+navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+
+function videoChat(sessionID,flag)
+{
+	var peer = new Peer(sessionID+flag, {key: 'bihsa4h1nt07wrk9'});
+	console.log(sessionID+flag);
+	if (flag=="white")
+	{
+		peer.on('call', function(call) 
+		{
+    		passiveCall(call);
+  		});
+	} 
+	else
+	{
+		 activeCall(peer,sessionID);
+	}
+	
+}
+
+function activeCall(peer,sessionID)
+{
+		navigator.getUserMedia({video: true, audio: true}, function(stream) {
+		document.getElementById("displayMe").src=URL.createObjectURL(stream);
+		document.getElementById("displayMe").play();
+		peer.on("error", function(err)
+		{
+			console.log(err);
+			setTimeout(function(){peer.call(sessionID + "white", stream);}, 5000);
+		});
+			var call = peer.call(sessionID + "white", stream);
+			call.on('stream', function(remoteStream) {
+	      	document.getElementById("displayOther").src=URL.createObjectURL(remoteStream);
+			document.getElementById("displayOther").play();
+	    	});
+	}, // errorCallback
+    function(err) {
+        console.log("The following error occured: " + err);
+    });
+
+}
+
+
+function passiveCall(call)
+{
+		navigator.getUserMedia({video: true, audio: true}, function(stream) {
+		document.getElementById("displayMe").src=URL.createObjectURL(stream);
+		document.getElementById("displayMe").play();
+		call.answer(stream);
+	}, // errorCallback
+    function(err) {
+        console.log("The following error occured: " + err);
+    });
+    
+    call.on('stream', function(remoteStream) {
+      	document.getElementById("displayOther").src=URL.createObjectURL(remoteStream);
+		document.getElementById("displayOther").play();
+    });
+       
+}
+
+var gameStarted=false;
+var blinkHandler=0;
+var myColor="";
+var blinkNow=false;
+function showInformation(playerColor)
+{
+//alert(playerColor);
+console.log(playerColor);
+	if(!gameStarted)
+	{
+		document.getElementById("fullblack").parentNode.removeChild(document.getElementById("fullblack"));
+		gameStarted=true;
+		myColor=playerColor
+		playerColor="weiß";
+	}
+	newTurn(playerColor==myColor);
+}
+	
+function newTurn(isItMe)
+{
+	clearInterval(blinkHandler);
+	document.getElementById("playerInfo").style.color="#ffffff";
+	var writeText="Sie (" + myColor +") sind momentan NICHT am Zug. Bitte haben Sie etwas Geduld, bis Ihr Gegner den nächsten Zug macht.";
+	if (isItMe)
+	{
+		blinkHandler=setInterval(function (){document.getElementById("playerInfo").style.color=(blinkNow?"#ffeeee" : "#ffffff"); blinkNow=!blinkNow;},500);
+		writeText="Sie (" + myColor +") sind momentan am Zug.";
+	}
+	document.getElementById("playerInfo").innerHTML=writeText;
+}
+
+
+</script>
+
+  <body>
+	<div id="playerInfo" style="padding-left:20px; background:#000000; position:absolute; left:10px; top:4px; width:900px; font-family:verdana; color:#ffffff; font-size:12px;"></div>
+
+    <!-- OPTIONAL: include this if you want history support -->
+    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+    
+    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+    <noscript>
+      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+        Your web browser must have JavaScript enabled
+        in order for this application to display correctly.
+      </div>
+    </noscript>
+
+   <div id="playGround" style="position:absolute; left:10px; top:40px"></div>
+   <div id="videoChat" style="position:absolute; left: 700px; top:10px">
+   <video id="displayMe" style="width:200px; height:200px;"></video><br><br>
+    <video id="displayOther" style="width:200px; height:200px;"></video>
+   </div>
+   <div id="fullblack" style="background:#000000; position:absolute; top:0px; left:0px; width:100%; height:100%; opacity: 0.94;filter: alpha(opacity = 94); font-family:verdana; color:#ffffff; font-size:12px;"><br><br><br><center>Bitte warten Sie, bis sich ein zweiter Spieler sich verbunden hat.</center></div>
+  </body>
+</html>

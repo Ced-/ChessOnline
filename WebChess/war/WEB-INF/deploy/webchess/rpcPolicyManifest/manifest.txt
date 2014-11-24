@@ -1,0 +1,3 @@
+# Module webchess
+# RPC service class, partial path of RPC policy file
+chess.client.GreetingService, 7348C43EB8E7BFC00B4C495E48E9525E.gwt.rpc
